@@ -213,3 +213,48 @@ rpm:
         container:
           - 'rpm --query --all --queryformat "%{url}\n" 2>/dev/null'
     delimiter: "\n"
+
+
+npm:
+  pkg_format: ''
+  os_guess:
+    - 'None'
+  path:
+    - 'usr/bin/npm'
+  shell: '/bin/bash' # could also be 'usr/bin/sh'
+  pkg_separators:
+    - '=='
+    - '<='
+    - '>='
+    - '<'
+    - '>'
+    - '~='
+  pinning_separator: '=='
+  names:
+    invoke:
+      1:
+        container:
+          # send any warnings of outdated pip version to /dev/null
+          - "npm ls --depth 0 2> /dev/null | tail -n +2 | cut -f 2 -d ' ' | cut -d '@' -f 1"
+    delimiter: "\n"
+  versions:
+    invoke:
+      1:
+        container:
+          - "pkgs=`npm ls --depth 0 2> /dev/null | tail -n +2 | cut -f 2 -d ' ' | cut -d '@' -f 1`"
+          - "for p in $pkgs; do npm view $p | head -2 | tail -1 | cut -d'|' -f 1 | cut -d '@' -f 2 ; done"
+    delimiter: "\n"
+  licenses:
+    invoke:
+      1:
+        container:
+          - "pkgs=`npm ls --depth 0 2> /dev/null | tail -n +2 | cut -f 2 -d ' ' | cut -d '@' -f 1`"
+          - "for p in $pkgs; do npm view $p | head -2 | tail -1 | cut -d'|' -f 2 | cut -d " " -f 2; done"
+    delimiter: "\n"
+  proj_urls:
+    invoke:
+      1:
+        container:
+          - "pkgs=`npm ls --depth 0 2> /dev/null | tail -n +2 | cut -f 2 -d ' ' | cut -d '@' -f 1`"
+          - "for p in $pkgs; do npm view $p | head -2 | tail -1 ; done"
+    delimiter: "\n"

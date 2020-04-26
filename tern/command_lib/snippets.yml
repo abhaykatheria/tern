@@ -58,3 +58,22 @@ rpm:
    install: '-i'
    remove: '-e'
    packages: 'rpm'
+
+
+npm:
+  install: 'install'
+  remove: 'uninstall'
+  ignore: 
+    - 'ls'
+    - 'list'
+    - 'ping'
+  packages: 'npm'
+
+yarn:
+  install: 'install'
+  remove: ''
+  ignore:
+    -
+    -
+    -
+  packages: 'npm'
